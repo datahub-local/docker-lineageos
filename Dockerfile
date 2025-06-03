@@ -1,10 +1,9 @@
-FROM eclipse-temurin:8-jammy
-LABEL maintainer="jfloff@inesc-id.pt"
+FROM ubuntu:focal
 
 ###################
 # This Dockerfile was based on the following Dockerfiles
 # - docker-lineageos: existing unoptimized image
-#    https://github.com/AnthoDingo/docker-lineageos/blob/autobuild/Dockerfile
+#    https://github.com/jfloff/docker-lineageos
 #
 
 # default user
@@ -13,7 +12,8 @@ ENV \
     # base dir
     BASE_DIR=/home/$USER \
     # device configuration dir
-    DEVICE_CONFIGS_DIR=/home/device-config
+    DEVICE_CONFIGS_DIR=/home/device-config \
+    DEBIAN_FRONTEND=noninteractive
 
 # install packages
 RUN set -ex ;\
@@ -88,7 +88,7 @@ RUN set -ex ;\
     echo "lineageos ALL=NOPASSWD: ALL" >> /etc/sudoers ;\
     # Android Setup
     # create paths: https://wiki.lineageos.org/devices/klte/build#create-the-directories
-    curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/bin/repo ;\
+    curl -k https://storage.googleapis.com/git-repo-downloads/repo > /usr/bin/repo ;\
     chmod a+x /usr/bin/repo ;\
     ln -s /usr/bin/python3 /usr/bin/python && \
     # config git coloring

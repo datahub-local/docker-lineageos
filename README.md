@@ -1,11 +1,8 @@
 # docker-lineageos
 
-[![Docker Stars](https://img.shields.io/docker/stars/jfloff/lineageos.svg)][hub]
-[![Docker Pulls](https://img.shields.io/docker/pulls/jfloff/lineageos.svg)][hub]
-
-[hub]: https://hub.docker.com/r/jfloff/lineageos/
-
 Docker container for building [LineageOS](https://lineageos.org/) (formerly known as CyanogenMod).
+
+* [GHCR.io](https://github.com/users/datahub-local/packages/container/package/node-exporter-textfiles)
 
 <!-- MDTOC maxdepth:6 firsth1:0 numbering:0 flatten:0 bullets:1 updateOnSave:1 -->
 
@@ -25,16 +22,16 @@ Docker container for building [LineageOS](https://lineageos.org/) (formerly know
 # pass required env variables
 $ docker run --rm --privileged \
   -v "$(pwd)/android":/home/lineageos \
-  -e GIT_USER_NAME=jfloff \
-  -e GIT_USER_EMAIL=jfloff@inesc-id.pt \
+  -e GIT_USER_NAME=email \
+  -e GIT_USER_EMAIL=email@example.com \
   -e DEVICE_CODENAME=klte \
-  -ti jfloff/lineageos lineageos init build
+  -ti ghcr.io/datahub-local/docker-lineageos lineageos init build
 
 # or pass a custom .env file
 $ docker run --rm --privileged \
   -v "$(pwd)/android":/home/lineageos \
   --env-file custom.env
-  -ti jfloff/lineageos lineageos init build
+  -ti ghcr.io/datahub-local/docker-lineageos lineageos init build
 ```
 
 
@@ -68,7 +65,7 @@ $ docker run --rm --privileged \
   -e GIT_USER_NAME=jfloff \
   -e GIT_USER_EMAIL=jfloff@inesc-id.pt \
   -e DEVICE_CODENAME=klte \
-  -ti jfloff/lineageos lineageos init build
+  -ti ghcr.io/datahub-local/docker-lineageos lineageos init build
 ```
 
 Instead of settings multiple env variables, you can also pass an env-file (as per [docker run reference](https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e-env-env-file)).
@@ -76,7 +73,7 @@ Instead of settings multiple env variables, you can also pass an env-file (as pe
 $ docker run --rm --privileged \
   -v "$(pwd)/android":/home/lineageos \
   --env-file custom.env
-  -ti jfloff/lineageos lineageos init build
+  -ti ghcr.io/datahub-local/docker-lineageos lineageos init build
 ```
 
 Note that we ran `lineageos init build` which is our custom script that is used to help init, sync and build LineageOS from within the container. Check `lineageos` script details below.
