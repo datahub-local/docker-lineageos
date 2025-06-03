@@ -114,7 +114,7 @@ Here is a rundown of all the variables that you can set.
 | **`DEVICE_CODENAME`** | Device's codename (see [more](https://wiki.lineageos.org/devices/)). <br>*Example*: `klte` | _**Required**_ | |
 | **`BASE_DIR`** | Directory where host volume with LineageOS was mounted | *optional* | `/home/$USER` |
 | **`LINEAGEOS_REPO`** | LineageOS repository | *optional* | `https://github.com/LineageOS/android.git` |
-| **`LINEAGEOS_BRANCH`** | LineageOS Branch. | *optional* | `cm-14.1` |
+| **`LINEAGEOS_BRANCH`** | LineageOS Branch. | *optional* | `lineage-22.2` |
 | **`LINEAGEOS_LOCAL_MANIFEST_REPO`** | LineageOS local manifest repository. | *optional* | |
 | **`LINEAGEOS_LOCAL_MANIFEST_BRANCH`** | LineageOS local manifest branch. | *optional* | |
 | **`PROPRIETARY_BLOBS_REPO`** | Repo with the [device's proprietary blobs](https://wiki.lineageos.org/devices/klte/build#extract-proprietary-blobs). <br>*Example*: `https://github.com/TheMuppets/proprietary_vendor_samsung` |  *optional* | |
@@ -139,7 +139,7 @@ These variables have to use the following template `EXTRA_DOWNLOAD_<ID>=("<URL>"
 For example, the following env will download the file `msm8974pro_sec_klte_vzw_defconfig` to `kernel/samsung/klte/arch/arm/configs/`:
 ```shell
 EXTRA_DOWNLOAD_1=(
-    'https://raw.githubusercontent.com/badowl/android_kernel_samsung_klte/cm-14.1/arch/arm/configs/msm8974pro_sec_klte_vzw_defconfig'
+    'https://raw.githubusercontent.com/badowl/android_kernel_samsung_klte/lineage-22.2/arch/arm/configs/msm8974pro_sec_klte_vzw_defconfig'
     'kernel/samsung/klte/arch/arm/configs/msm8974pro_sec_klte_vzw_defconfig'
 )
 ```

@@ -35,6 +35,7 @@ RUN set -ex && \
           g++-multilib \
           gcc-multilib \
           git \
+          git-lfs \
           gnupg \
           gperf \
           imagemagick \
