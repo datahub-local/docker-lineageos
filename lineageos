@@ -127,27 +127,28 @@ function init {
     # download repo
     sync
 
-    # Support multiple proprietary blobs repos, branches, and dirs separated by comma
-    IFS=',' read -ra BLOBS_BRANCHES <<< "$PROPRIETARY_BLOBS_BRANCH"
-    IFS=',' read -ra BLOBS_REPOS <<< "$PROPRIETARY_BLOBS_REPO"
-    IFS=',' read -ra BLOBS_DIRS <<< "$PROPRIETARY_BLOBS_DIR"
+    if [[ ! -z $PROPRIETARY_BLOBS_REPO ]]; then
+        # Support multiple proprietary blobs repos, branches, and dirs separated by comma
+        IFS=',' read -ra BLOBS_BRANCHES <<< "$PROPRIETARY_BLOBS_BRANCH"
+        IFS=',' read -ra BLOBS_REPOS <<< "$PROPRIETARY_BLOBS_REPO"
+        IFS=',' read -ra BLOBS_DIRS <<< "$PROPRIETARY_BLOBS_DIR"
 
-    for idx in "${!BLOBS_REPOS[@]}"; do
-        branch="${BLOBS_BRANCHES[$idx]}"
-        repo="${BLOBS_REPOS[$idx]}"
-        dir="${BLOBS_DIRS[$idx]}"
+        for idx in "${!BLOBS_REPOS[@]}"; do
+            branch="${BLOBS_BRANCHES[$idx]}"
+            repo="${BLOBS_REPOS[$idx]}"
+            dir="${BLOBS_DIRS[$idx]}"
 
-        if [[ ! -z $repo ]]; then
-            echo "[INFO] Cloning device's proprietary blobs: $repo -> $dir (branch: $branch)"
-            if [ ! -d "$dir" ]; then
-                git clone -b "$branch" --single-branch "$repo" "$dir"
-            else
-                pushd "$dir" > /dev/null 2>&1
-                git pull
-                popd > /dev/null 2>&1
+            if [[ ! -z $repo ]]; then
+                echo "[INFO] Cloning device's proprietary blobs: $repo -> $dir (branch: $branch)"
+                if [[ ! -d "$dir" ]]; then
+                    git clone -b "$branch" --single-branch "$repo" "$dir"
+                else
+                    pushd "$dir" > /dev/null 2>&1
+                    git pull
+                    popd > /dev/null 2>&1
+                fi
             fi
-        fi
-    done
+        done
     fi
 
     echo "[INFO] Downloading extra files"
