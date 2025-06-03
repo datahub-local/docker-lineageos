@@ -202,11 +202,23 @@ function sync {
     repo sync --force-sync -c -j $(nproc --all)
 
     if [[ ! -z $PROPRIETARY_BLOBS_REPO ]]; then
-        # update mupets
-        echo "[INFO] Updating device's proprietary blobs repository"
-        pushd $PROPRIETARY_BLOBS_DIR > /dev/null 2>&1
-        git pull
-        popd > /dev/null 2>&1
+        # Support multiple proprietary blobs repos, branches, and dirs separated by comma
+        IFS=',' read -ra BLOBS_BRANCHES <<< "$PROPRIETARY_BLOBS_BRANCH"
+        IFS=',' read -ra BLOBS_REPOS <<< "$PROPRIETARY_BLOBS_REPO"
+        IFS=',' read -ra BLOBS_DIRS <<< "$PROPRIETARY_BLOBS_DIR"
+
+        for idx in "${!BLOBS_REPOS[@]}"; do
+            branch="${BLOBS_BRANCHES[$idx]}"
+            repo="${BLOBS_REPOS[$idx]}"
+            dir="${BLOBS_DIRS[$idx]}"
+
+            if [[ ! -z $repo ]]; then
+                echo "[INFO] Updating device's proprietary blobs repository: $repo -> $dir (branch: $branch)"
+                pushd "$dir" > /dev/null 2>&1
+                git pull
+                popd > /dev/null 2>&1
+            fi
+        done
     fi
 }
 
