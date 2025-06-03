@@ -116,7 +116,7 @@ function init {
 
     echo "[INFO] Initializing repository."
     # forces yes to the anoying color output prompt
-    yes | repo init -u $LINEAGEOS_REPO -b $LINEAGEOS_BRANCH
+    yes | repo init -u $LINEAGEOS_REPO -b $LINEAGEOS_BRANCH --git-lfs --no-clone-bundle
 
     # Update tree with the local manifest (if provided)
     if [[ ! -z $LINEAGEOS_LOCAL_MANIFEST_REPO ]]; then
@@ -127,22 +127,27 @@ function init {
     # download repo
     sync
 
-    if [[ ! -z $PROPRIETARY_BLOBS_REPO ]]; then
-        echo "[INFO] Cloning device's proprietary blobs"
+    # Support multiple proprietary blobs repos, branches, and dirs separated by comma
+    IFS=',' read -ra BLOBS_BRANCHES <<< "$PROPRIETARY_BLOBS_BRANCH"
+    IFS=',' read -ra BLOBS_REPOS <<< "$PROPRIETARY_BLOBS_REPO"
+    IFS=',' read -ra BLOBS_DIRS <<< "$PROPRIETARY_BLOBS_DIR"
 
-        # We could possibly improve this by clever search in the device/ folder
-        # but that would be too much work
-        # - https://stackoverflow.com/a/18194523/1700053
-        #
-        # AS A USER: - if you don't want to download a whole repo, use the EXTRA_DOWNLOAD_X variables
-        #            - if you have the device itself you can use EXTRA_DOWNLOADS_* var
-        if [ ! -d "$PROPRIETARY_BLOBS_DIR" ]; then
-            git clone -b "$PROPRIETARY_BLOBS_BRANCH" --single-branch "$PROPRIETARY_BLOBS_REPO" "$PROPRIETARY_BLOBS_DIR"
-        else
-            pushd $PROPRIETARY_BLOBS_DIR > /dev/null 2>&1
-            git pull
-            popd > /dev/null 2>&1
+    for idx in "${!BLOBS_REPOS[@]}"; do
+        branch="${BLOBS_BRANCHES[$idx]}"
+        repo="${BLOBS_REPOS[$idx]}"
+        dir="${BLOBS_DIRS[$idx]}"
+
+        if [[ ! -z $repo ]]; then
+            echo "[INFO] Cloning device's proprietary blobs: $repo -> $dir (branch: $branch)"
+            if [ ! -d "$dir" ]; then
+                git clone -b "$branch" --single-branch "$repo" "$dir"
+            else
+                pushd "$dir" > /dev/null 2>&1
+                git pull
+                popd > /dev/null 2>&1
+            fi
         fi
+    done
     fi
 
     echo "[INFO] Downloading extra files"

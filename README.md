@@ -117,9 +117,9 @@ Here is a rundown of all the variables that you can set.
 | **`LINEAGEOS_BRANCH`** | LineageOS Branch. | *optional* | `lineage-22.2` |
 | **`LINEAGEOS_LOCAL_MANIFEST_REPO`** | LineageOS local manifest repository. | *optional* | |
 | **`LINEAGEOS_LOCAL_MANIFEST_BRANCH`** | LineageOS local manifest branch. | *optional* | |
-| **`PROPRIETARY_BLOBS_REPO`** | Repo with the [device's proprietary blobs](https://wiki.lineageos.org/devices/klte/build#extract-proprietary-blobs). <br>*Example*: `https://github.com/TheMuppets/proprietary_vendor_samsung` |  *optional* | |
-| **`PROPRIETARY_BLOBS_BRANCH`** | Branch to use in the proprietary blobs repo |  *optional* | `$LINEAGEOS_BRANCH` |
-| **`PROPRIETARY_BLOBS_DIR`** | Directory to where the repo with the device's blobs will be cloned to. <br>*Example*: `$BASE_DIR/vendor/samsung` | *optional* | |
+| **`PROPRIETARY_BLOBS_REPO`** | Comma-separated list of repos with the [device's proprietary blobs](https://wiki.lineageos.org/devices/klte/build#extract-proprietary-blobs). <br>*Example*: `https://github.com/TheMuppets/proprietary_vendor_samsung,https://github.com/TheMuppets/proprietary_vendor_qcom` |  *optional* | |
+| **`PROPRIETARY_BLOBS_BRANCH`** | Comma-separated list of branches to use in the proprietary blobs repos (order must match repos). <br>*Example*: `lineage-22.2,main` |  *optional* | `$LINEAGEOS_BRANCH` |
+| **`PROPRIETARY_BLOBS_DIR`** | Comma-separated list of directories to where the repos with the device's blobs will be cloned to (order must match repos). <br>*Example*: `$BASE_DIR/vendor/samsung,$BASE_DIR/vendor/qcom` | *optional* | |
 | **`USE_CCACHE`** | Turn on caching to speed up build (see [more](https://wiki.lineageos.org/devices/klte/build#turn-on-caching-to-speed-up-build)) | *optional* | `1` |
 | **`CCACHE_SIZE`** | Maximum amount of cache disk space allowed | *optional* | `50G` |
 | **`CCACHE_COMPRESS`** | Enable the `ccache` compression | *optional* | `1` |
@@ -144,6 +144,18 @@ EXTRA_DOWNLOAD_1=(
 )
 ```
 
+### Multiple proprietary blobs support
+
+You can now specify multiple proprietary blobs repositories, branches, and directories by separating each value with a comma in the corresponding environment variables. The order of the values must match across `PROPRIETARY_BLOBS_REPO`, `PROPRIETARY_BLOBS_BRANCH`, and `PROPRIETARY_BLOBS_DIR`.
+
+**Example:**
+```shell
+PROPRIETARY_BLOBS_REPO="https://github.com/TheMuppets/proprietary_vendor_samsung,https://github.com/TheMuppets/proprietary_vendor_qcom"
+PROPRIETARY_BLOBS_BRANCH="lineage-22.2,main"
+PROPRIETARY_BLOBS_DIR="$BASE_DIR/vendor/samsung,$BASE_DIR/vendor/qcom"
+```
+
+This will clone each blobs repo into the specified directory using the corresponding branch.
 
 
 
